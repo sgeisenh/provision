@@ -1,4 +1,7 @@
 ---
+- name: Add myself to groups
+  import_tasks: groups.yml
+
 - name: Set up ansible auto-provisioning
   import_tasks: autoprovision.yml
 

@@ -1,0 +1,8 @@
+---
+- name: Add to appropriate groups
+  ansible.builtin.user:
+    name: sgeisenh
+    append: true
+    groups:
+      - input
+      - video
