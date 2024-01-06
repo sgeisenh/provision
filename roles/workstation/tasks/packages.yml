@@ -3,6 +3,50 @@
   ansible.builtin.apt:
     pkg: gnupg
 
+- name: Add contrib repo on Debian
+  when: ansible_distribution == "Debian"
+  ansible.builtin.apt_repository:
+    repo: "deb http://deb.debian.org/debian/ bookworm main contrib non-free"
+
+- name: Create dpkg arch file
+  when: ansible_distribution == "Debian"
+  ansible.builtin.lineinfile:
+    path: /var/lib/dpkg/arch
+    line: "amd64"
+    create: true
+    mode: "0755"
+
+- name: Add 32-bit repos
+  when: ansible_distribution == "Debian"
+  ansible.builtin.lineinfile:
+    path: /var/lib/dpkg/arch
+    line: "i386"
+    create: true
+    mode: "0755"
+  register: add_i386
+
+- name: Install 32-bit packages
+  when: ansible_distribution == "Debian" and add_i386.changed
+  ansible.builtin.apt:
+    update_cache: true
+    pkg:
+      - libglx-mesa0:i386
+      - mesa-vulkan-drivers:i386
+      - libgl1-mesa-dri:i386
+
+- name: Install steam (Debian)
+  when: ansible_distribution == "Debian"
+  ansible.builtin.apt:
+    update_cache: true
+    pkg:
+      - mesa-vulkan-drivers
+      - steam-installer
+
+- name: Install steam (Ubuntu)
+  when: ansible_distribution == "Ubuntu"
+  ansible.builtin.apt:
+    pkg: steam
+
 - name: Add syncthing third-party repo
   block:
     - name: Add apt keyring for syncthing
@@ -53,7 +97,6 @@
       - ripgrep
       - ruby-full
       - shellcheck
-      - steam
       - stow
       - sway
       - syncthing
