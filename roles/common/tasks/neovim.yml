@@ -31,10 +31,6 @@
     check_mode: false
     register: neovim_installed_version
 
-  - name: Print variables
-    ansible.builtin.debug:
-      msg: "Tag: {{ neovim_stable_tag.stdout }}; Version: {{ neovim_installed_version.stdout }}"
-
   - name: clean up artifacts from prior builds
     when: neovim_stable_tag.stdout != neovim_installed_version.stdout
     community.general.make:
