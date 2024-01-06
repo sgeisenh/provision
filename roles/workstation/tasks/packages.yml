@@ -3,11 +3,6 @@
   ansible.builtin.apt:
     pkg: gnupg
 
-- name: Add contrib repo on Debian
-  when: ansible_distribution == "Debian"
-  ansible.builtin.apt_repository:
-    repo: "deb http://deb.debian.org/debian/ bookworm main contrib non-free"
-
 - name: Create dpkg arch file
   when: ansible_distribution == "Debian"
   ansible.builtin.lineinfile:
@@ -25,10 +20,14 @@
     mode: "0755"
   register: add_i386
 
+- name: Add contrib repo on Debian
+  when: ansible_distribution == "Debian"
+  ansible.builtin.apt_repository:
+    repo: "deb http://deb.debian.org/debian/ bookworm main contrib non-free"
+
 - name: Install 32-bit packages
   when: ansible_distribution == "Debian" and add_i386.changed
   ansible.builtin.apt:
-    update_cache: true
     pkg:
       - libglx-mesa0:i386
       - mesa-vulkan-drivers:i386
@@ -37,7 +36,6 @@
 - name: Install steam (Debian)
   when: ansible_distribution == "Debian"
   ansible.builtin.apt:
-    update_cache: true
     pkg:
       - mesa-vulkan-drivers
       - steam-installer
