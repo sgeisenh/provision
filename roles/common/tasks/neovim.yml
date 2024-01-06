@@ -1,0 +1,31 @@
+---
+- name: Install build dependencies
+  package:
+    name:
+      - cmake
+      - curl
+      - gettext
+      - ninja-build
+      - unzip
+
+- name: Clone and build neovim
+  vars:
+    build_dir: "{{ ansible_env.HOME }}/github/neovim"
+  block:
+  - name: clone neovim source repository
+    ansible.builtin.git:
+      repo: "https://github.com/neovim/neovim"
+      dest: "{{ build_dir }}"
+      version: stable
+
+  - name: clean up artifacts from prior builds
+    community.general.make:
+      chdir: "{{ build_dir }}"
+      target: distclean
+
+  - name: clean up artifacts from prior builds
+    community.general.make:
+      chdir: "{{ build_dir }}"
+      params:
+        CMAKE_BUILD_TYPE: RelWithDebInfo
+      target: install
