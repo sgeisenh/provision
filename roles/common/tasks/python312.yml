@@ -37,9 +37,8 @@
   check_mode: false
   register: python312_installed_version
 
-- name: Download, unarchive, build and install python3.12
+- name: Unarchive, build and install python3.12
   vars:
-    download_dest: "{{ ansible_env.HOME }}/srcs/Python-3.12.1.tgz"
     src_dest: "{{ ansible_env.HOME }}/srcs/Python-3.12.1"
   when: python312_installed_version.stdout != "Python 3.12.1"
   block:
@@ -48,16 +47,11 @@
         path: "{{ src_dest }}"
         state: directory
         mode: "0755"
-    - name: Download source tarball
-      ansible.builtin.get_url:
-        url: https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
-        dest: "{{ download_dest }}"
-        checksum: md5:51c5c22dcbc698483734dff5c8028606
     - name: Unarchive source tarball
       ansible.builtin.unarchive:
-        remote_src: true
-        src: "{{ download_dest }}"
+        src: https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
         dest: "{{ src_dest }}"
+        remote_src: true
     - name: Configure build
       ansible.builtin.command:
         chdir: "{{ src_dest }}"
