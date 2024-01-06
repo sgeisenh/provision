@@ -43,7 +43,6 @@
         regexp: "^Icon=kitty$"
         line: "Icon={{ kitty_app_dir }}/share/icons/hicolor/256x256/apps/kitty.png"
 
-    - name: Install kitty-terminfo
-      ansible.builtin.apt:
-        pkg: kitty-terminfo
-      become: true
+- name: Install kitty-terminfo
+  ansible.builtin.apt:
+    pkg: kitty-terminfo
