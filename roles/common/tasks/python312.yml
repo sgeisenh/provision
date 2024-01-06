@@ -62,5 +62,6 @@
         chdir: "{{ src_dest }}"
         cmd: make -j
     - name: Install
+      ansible.builtin.command:
         chdir: "{{ src_dest }}"
         cmd: make altinstall
