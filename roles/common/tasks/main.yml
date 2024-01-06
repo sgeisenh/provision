@@ -2,5 +2,9 @@
 - name: Set up ansible auto-provisioning
   import_tasks: autoprovision.yml
 
+- name: Install python3.12
+  import_tasks: python312.yml
+
 - name: Install neovim
   import_tasks: neovim.yml
+

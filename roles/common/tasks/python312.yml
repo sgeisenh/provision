@@ -1,0 +1,66 @@
+---
+- name: Enable source repository
+  ansible.builtin.apt_repository
+    repo: "{{ distro_source_repos[ansible_facts.distribution][ansible_facts.distribution_version] }}"
+
+- name: Install apt build dependencies
+  ansible.builtin.apt:
+    pkg: python3
+    state: build-dep
+
+- name: Install package dependencies
+  ansible.builtin.apt:
+    pkg:
+    - build-essential
+    - gdb
+    - lcov
+    - libbz2-dev
+    - libffi-dev
+    - libgdbm-compat-dev
+    - libgdbm-dev
+    - liblzma-dev
+    - libncurses5-dev
+    - libreadline6-dev
+    - libsqlite3-dev
+    - libssl-dev
+    - lzma
+    - lzma-dev
+    - pkg-config
+    - tk-dev
+    - uuid-dev
+    - zlib1g-dev
+
+- name: Get python3.12 version
+  ansible.builtin.command: python3.12 --version
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  register: python312_installed_version
+
+- name: Download, unarchive, build and install python3.12
+  vars:
+    download_dest: "{{ ansible_env.HOME }}/srcs/Python-3.12.1.tgz"
+    src_dest: "{{ ansible_env.HOME }}/srcs/Python-3.12.1"
+  when: python312_installed_version != "Python 3.12.1"
+  block:
+    - name: Download source tarball
+      ansible.builtin.get_url:
+        url: https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
+        dest: "{{ download_dest }}"
+        checksum: md5:51c5c22dcbc698483734dff5c8028606
+    - name: Unarchive source tarball
+      ansible.builtin.unarchive:
+        remote_src: true
+        src: "{{ download_dest }}"
+        dest: "{{ src_dest }}"
+    - name: Configure build
+      ansible.builtin.command:
+        chdir: "{{ src_dest }}"
+        cmd: ./configure --enable-optimizations --with-lto --with-pydebug
+    - name: Run the build
+      ansible.builtin.command:
+        chdir: "{{ src_dest }}"
+        cmd: make -j
+    - name: Install
+        chdir: "{{ src_dest }}"
+        cmd: make altinstall
