@@ -2,5 +2,8 @@
 - name: Install packages
   import_tasks: packages.yml
 
+- name: Install kitty
+  import_tasks: kitty.yml
+
 - name: Set up desktop wallpaper
   import_tasks: wallpaper.yml
