@@ -40,18 +40,19 @@
 
 - name: Unarchive, build and install python3.12
   vars:
-    src_dest: "{{ ansible_env.HOME }}/srcs/Python-3.12.1"
+    srcs_dir: "{{ ansible_env.HOME }}/srcs"
+    src_dest: "{{ srcs_dir }}/Python-3.12.1"
   when: python312_installed_version.stdout != "Python 3.12.1"
   block:
     - name: Create source directory
       ansible.builtin.file:
-        path: "{{ src_dest }}"
+        path: "{{ srcs_dir }}"
         state: directory
         mode: "0755"
     - name: Unarchive source tarball
       ansible.builtin.unarchive:
         src: https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
-        dest: "{{ src_dest }}"
+        dest: "{{ srcs_dir }}"
         remote_src: true
     - name: Configure build
       ansible.builtin.command:
