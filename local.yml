@@ -26,6 +26,7 @@
         - ninja-build
         - pandoc
         - pkg-config
+        - python3-psutil
         - ripgrep
         - scdoc
         - shellcheck
