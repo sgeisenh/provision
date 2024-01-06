@@ -19,7 +19,9 @@
       version: stable
 
   - name: Get latest tag
-    ansible.builtin.command: git describe --tags
+    ansible.builtin.command:
+      chdir: "{{ build_dir }}"
+      cmd: git describe --tags
     register: neovim_stable_tag
 
   - name: Get installed neovim version
