@@ -46,11 +46,13 @@
       group: root
 
   - name: set wallpaper
+    become_user: sgeisenh
     dconf:
       key: "/org/gnome/desktop/background/picture-uri"
       value: "'file://{ wallpaper_path }}'"
 
   - name: set wallpaper position
+    become_user: sgeisenh
     dconf:
       key: "/org/gnome/desktop/background/picture-options"
       value: "'zoom'"
