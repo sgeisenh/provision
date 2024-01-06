@@ -41,6 +41,7 @@
       - fd-find
       - fzf
       - git
+      - gnome-tweaks
       - gnupg
       - htop
       - jq
@@ -60,3 +61,28 @@
       - tree
       - unzip
       - valgrind
+
+- name: Install snaps
+  when: ansible_distribution == "Ubuntu"
+  community.general.snap:
+    name:
+      - chromium
+      - bitwarden
+    classic: true
+
+- name: Install chromium
+  when: ansible_distribution == "Debian"
+  ansible.builtin.apt:
+    pkg:
+      - chromium
+
+- name: Install bitwarden
+  when: ansible_distribution == "Debian"
+  block:
+    - name: Download deb package
+      ansible.builtin.get_url:
+        url: https://vault.bitwarden.com/download/?app=desktop&platform=linux&variant=deb
+        dest: /tmp/bitwarden.deb
+    - name: Install deb package
+      ansible.builtin.apt:
+        deb: /tmp/bitwarden.deb
