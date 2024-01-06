@@ -6,4 +6,31 @@
   tasks:
   - name: install htop
     package: 
-      name: htop
+      name: 
+        - curl
+        - fzf
+        - gdb
+        - gettext
+        - git
+        - htop
+        - jq
+        - meson
+        - pandoc
+        - ripgrep
+        - shellcheck
+        - steam
+        - stow
+        - sway
+        - tmux
+        - valgrind
+        - vim
+        - build-essential
+        - ca-certificates
+        - cmake
+        - gnupg
+        - gperf
+        - lcov
+        - ninja-build
+        - pkg-config
+        - scdoc
+        - unzip
