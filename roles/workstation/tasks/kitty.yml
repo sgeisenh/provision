@@ -19,6 +19,12 @@
         dest: "{{ kitty_app_dir }}"
         remote_src: true
 
+    - name: Create local bin directory
+      ansible.builtin.file:
+        path: "{{ home_dir }}/.local/bin"
+        state: directory
+        mode: "0755"
+
     - name: Link kitty binary
       ansible.builtin.file:
         src: "{{ kitty_app_dir }}/bin/kitty"
