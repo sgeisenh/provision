@@ -22,6 +22,9 @@
     ansible.builtin.command:
       chdir: "{{ build_dir }}"
       cmd: git describe --tags
+    changed_when: false
+    failed_when: false
+    check_mode: false
     register: neovim_stable_tag
 
   - name: Get installed neovim version
