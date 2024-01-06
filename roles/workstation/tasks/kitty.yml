@@ -3,7 +3,8 @@
 - name: Install kitty
   become_user: sgeisenh
   vars:
-    kitty_app_dir: "{{ ansible_env.HOME }}/.local/kitty.app"
+    home_dir: "/home/sgeisenh"
+    kitty_app_dir: "{{ home_dir }}/.local/kitty.app"
   block:
     - name: Create kitty directory
       ansible.builtin.file:
@@ -21,18 +22,18 @@
     - name: Link kitty binary
       ansible.builtin.file:
         src: "{{ kitty_app_dir }}/bin/kitty"
-        dest: "{{ ansible_env.HOME }}/.local/bin/kitty"
+        dest: "{{ home_dir }}/.local/bin/kitty"
         state: link
 
     - name: Copy kitty icon
       ansible.builtin.copy:
         src: "{{ kitty_app_dir }}/share/applications/kitty.desktop"
-        dest: "{{ ansible_env.HOME }}/.local/share/applications"
+        dest: "{{ home_dir }}/.local/share/applications"
         mode: "0664"
 
     - name: Change kitty icon file path
       ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.local/share/applications/kitty.desktop"
+        path: "{{ home_dir }}/.local/share/applications/kitty.desktop"
         regexp: "^Icon=kitty$"
         line: "Icon={{ kitty_app_dir }}/share/icons/hicolor/256x256/apps/kitty.png"
 
