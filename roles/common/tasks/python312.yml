@@ -30,6 +30,11 @@
     - uuid-dev
     - zlib1g-dev
 
+- name: Create srcs directory
+  ansible.builtin.file:
+    path: "{{ ansible_env.HOME }}/srcs"
+    state: directory
+
 - name: Get python3.12 version
   ansible.builtin.command: python3.12 --version
   changed_when: false
