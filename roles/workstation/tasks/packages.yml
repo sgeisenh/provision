@@ -1,35 +1,62 @@
 ---
+- name: Install gpg so we can add keyrings
+  ansible.builtin.apt:
+    pkg: gnupg
+
+- name: Add syncthing third-party repo
+  block:
+    - name: Add apt keyring for syncthing
+      ansible.builtin.get_url:
+        url: https://syncthing.net/release-key.gpg
+        dest: /etc/apt/keyrings/syncthing-archive-keyring.gpg
+
+    - name: Add apt source for syncthing
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable"
+        state: present
+
+- name: Add nodesource third-party repo
+  block:
+    - name: Download NodeSource gpg key
+      ansible.builtin.get_url:
+        url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+        dest: /tmp/nodesource-repo.gpg.key
+        mode: '0644'
+      changed_when: false
+
+    - name: Add the GPG key to keyrings
+      ansible.builtin.command:
+        cmd: gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg /tmp/nodesource-repo.gpg.key
+        creates: /etc/apt/keyrings/nodesource.gpg
+
+    - name: Add apt source for nodesource
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main"
+        state: present
+
 - name: install packages
   ansible.builtin.apt:
     pkg:
-      - build-essential
-      - ca-certificates
-      - cmake
       - curl
       - fd-find
       - fzf
-      - gdb
-      - gettext
       - git
       - gnupg
-      - gperf
       - htop
       - jq
-      - lcov
       - meson
       - ninja-build
+      - nodejs
       - pandoc
-      - pkg-config
       - python3-psutil
       - ripgrep
       - ruby-full
-      - scdoc
       - shellcheck
       - steam
       - stow
       - sway
+      - syncthing
       - tmux
       - tree
       - unzip
       - valgrind
-      - vim
