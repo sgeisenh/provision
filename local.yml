@@ -41,7 +41,7 @@
   - name: copy wallpaper file
     copy:
       src: files/wallpaper.png
-      dest: {{ wallpaper_path }}
+      dest: "{{ wallpaper_path }}"
       owner: root
       group: root
 
