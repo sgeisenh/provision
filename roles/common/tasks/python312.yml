@@ -1,5 +1,6 @@
 ---
 - name: Enable source repository
+  when: ansible_facts.distribution != "Debian"
   ansible.builtin.apt_repository:
     repo: "{{ distro_source_repos[ansible_facts.distribution][ansible_facts.distribution_version] }}"
 
