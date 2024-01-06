@@ -1,0 +1,33 @@
+---
+- name: install packages
+  package: 
+    name: 
+      - build-essential
+      - ca-certificates
+      - cmake
+      - curl
+      - fzf
+      - gdb
+      - gettext
+      - git
+      - gnupg
+      - gperf
+      - htop
+      - jq
+      - lcov
+      - meson
+      - ninja-build
+      - pandoc
+      - pkg-config
+      - python3-psutil
+      - ripgrep
+      - scdoc
+      - shellcheck
+      - steam
+      - stow
+      - sway
+      - tmux
+      - tree
+      - unzip
+      - valgrind
+      - vim
