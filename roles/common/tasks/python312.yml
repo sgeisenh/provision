@@ -30,11 +30,6 @@
     - uuid-dev
     - zlib1g-dev
 
-- name: Create srcs directory
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/srcs"
-    state: directory
-
 - name: Get python3.12 version
   ansible.builtin.command: python3.12 --version
   changed_when: false
@@ -48,6 +43,10 @@
     src_dest: "{{ ansible_env.HOME }}/srcs/Python-3.12.1"
   when: python312_installed_version != "Python 3.12.1"
   block:
+    - name: Create source directory
+      ansible.builtin.file:
+        path: "{{ src_dest }}"
+        state: directory
     - name: Download source tarball
       ansible.builtin.get_url:
         url: https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
