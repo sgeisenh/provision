@@ -2,6 +2,8 @@
 - hosts: localhost
   connection: local
   become: true
+  vars:
+    wallpaper_path: /usr/share/backgrounds/ansible-wallpaper.png
 
   tasks:
   - name: install packages
@@ -31,6 +33,24 @@
         - stow
         - sway
         - tmux
+        - tree
         - unzip
         - valgrind
         - vim
+
+  - name: copy wallpaper file
+    copy:
+      src: files/wallpaper.png
+      dest: {{ wallpaper_path }}
+      owner: root
+      group: root
+
+  - name: set wallpaper
+    dconf:
+      key: "/org/gnome/desktop/background/picture-uri"
+      value: "'file://{ wallpaper_path }}'"
+
+  - name: set wallpaper position
+    dconf:
+      key: "/org/gnome/desktop/background/picture-options"
+      value: "'zoom'"
