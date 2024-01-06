@@ -1,0 +1,8 @@
+[workstations]
+officedesk.local
+
+[laptops]
+thinkpad.local
+
+[servers]
+chromebox.local
