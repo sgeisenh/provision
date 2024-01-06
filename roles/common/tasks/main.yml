@@ -7,4 +7,3 @@
 
 - name: Install neovim
   import_tasks: neovim.yml
-

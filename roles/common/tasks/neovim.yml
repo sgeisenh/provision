@@ -1,7 +1,7 @@
 ---
 - name: Install build dependencies
-  package:
-    name:
+  ansible.builtin.apt:
+    pkg:
       - cmake
       - curl
       - gettext
@@ -12,38 +12,38 @@
   vars:
     build_dir: "{{ ansible_env.HOME }}/github/neovim"
   block:
-  - name: clone neovim source repository
-    ansible.builtin.git:
-      repo: "https://github.com/neovim/neovim"
-      dest: "{{ build_dir }}"
-      version: stable
+    - name: clone neovim source repository
+      ansible.builtin.git:
+        repo: "https://github.com/neovim/neovim"
+        dest: "{{ build_dir }}"
+        version: stable
 
-  - name: Get latest tag
-    ansible.builtin.command:
-      chdir: "{{ build_dir }}"
-      cmd: git describe --tags
-    changed_when: false
-    failed_when: false
-    check_mode: false
-    register: neovim_stable_tag
+    - name: Get latest tag # noqa: command-instead-of-module
+      ansible.builtin.command:
+        chdir: "{{ build_dir }}"
+        cmd: git describe --tags
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      register: neovim_stable_tag
 
-  - name: Get installed neovim version
-    ansible.builtin.shell: nvim --version | sed -rn 's/NVIM (v.*)/\1/p'
-    changed_when: false
-    failed_when: false
-    check_mode: false
-    register: neovim_installed_version
+    - name: Get installed neovim version
+      ansible.builtin.shell: nvim --version | sed -rn 's/NVIM (v.*)/\1/p'
+      changed_when: false
+      failed_when: false
+      check_mode: false
+      register: neovim_installed_version
 
-  - name: clean up artifacts from prior builds
-    when: neovim_stable_tag.stdout != neovim_installed_version.stdout
-    community.general.make:
-      chdir: "{{ build_dir }}"
-      target: distclean
+    - name: clean up artifacts from prior builds
+      when: neovim_stable_tag.stdout != neovim_installed_version.stdout
+      community.general.make:
+        chdir: "{{ build_dir }}"
+        target: distclean
 
-  - name: build and install neovim
-    when: neovim_stable_tag.stdout != neovim_installed_version.stdout
-    community.general.make:
-      chdir: "{{ build_dir }}"
-      params:
-        CMAKE_BUILD_TYPE: RelWithDebInfo
-      target: install
+    - name: build and install neovim
+      when: neovim_stable_tag.stdout != neovim_installed_version.stdout
+      community.general.make:
+        chdir: "{{ build_dir }}"
+        params:
+          CMAKE_BUILD_TYPE: RelWithDebInfo
+        target: install

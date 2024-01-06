@@ -5,6 +5,7 @@
     dest: "{{ wallpaper_path }}"
     owner: root
     group: root
+    mode: '0644'
 
 - name: set wallpaper
   become_user: sgeisenh

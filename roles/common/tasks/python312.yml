@@ -11,24 +11,24 @@
 - name: Install package dependencies
   ansible.builtin.apt:
     pkg:
-    - build-essential
-    - gdb
-    - lcov
-    - libbz2-dev
-    - libffi-dev
-    - libgdbm-compat-dev
-    - libgdbm-dev
-    - liblzma-dev
-    - libncurses5-dev
-    - libreadline6-dev
-    - libsqlite3-dev
-    - libssl-dev
-    - lzma
-    - lzma-dev
-    - pkg-config
-    - tk-dev
-    - uuid-dev
-    - zlib1g-dev
+      - build-essential
+      - gdb
+      - lcov
+      - libbz2-dev
+      - libffi-dev
+      - libgdbm-compat-dev
+      - libgdbm-dev
+      - liblzma-dev
+      - libncurses5-dev
+      - libreadline6-dev
+      - libsqlite3-dev
+      - libssl-dev
+      - lzma
+      - lzma-dev
+      - pkg-config
+      - tk-dev
+      - uuid-dev
+      - zlib1g-dev
 
 - name: Get python3.12 version
   ansible.builtin.command: python3.12 --version
@@ -47,6 +47,7 @@
       ansible.builtin.file:
         path: "{{ src_dest }}"
         state: directory
+        mode: "0755"
     - name: Download source tarball
       ansible.builtin.get_url:
         url: https://www.python.org/ftp/python/3.12.1/Python-3.12.1.tgz
@@ -61,11 +62,14 @@
       ansible.builtin.command:
         chdir: "{{ src_dest }}"
         cmd: ./configure --enable-optimizations --with-lto --with-pydebug
+      changed_when: python312_installed_version.stdout != "Python 3.12.1"
     - name: Run the build
       ansible.builtin.command:
         chdir: "{{ src_dest }}"
         cmd: make -j
+      changed_when: python312_installed_version.stdout != "Python 3.12.1"
     - name: Install
       ansible.builtin.command:
         chdir: "{{ src_dest }}"
         cmd: make altinstall
+        creates: /usr/local/bin/python3.12
