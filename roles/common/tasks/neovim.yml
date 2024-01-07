@@ -17,6 +17,7 @@
         repo: "https://github.com/neovim/neovim"
         dest: "{{ build_dir }}"
         version: stable
+        force: true
 
     - name: Get latest tag # noqa: command-instead-of-module
       ansible.builtin.command:
