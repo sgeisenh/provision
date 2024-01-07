@@ -82,6 +82,7 @@
       - curl
       - fd-find
       - fzf
+      - gh
       - git
       - gnome-tweaks
       - gnupg
